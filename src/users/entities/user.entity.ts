@@ -12,9 +12,12 @@ export class User {
   @Column({ type: 'varchar', length: 100 })
   email: string;
 
+  @Column()
+  password: string;
+
   @Column({ type: 'enum', enum: GENDER })
   gender: GENDER;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true, default: null })
   address: string;
 }
