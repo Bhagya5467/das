@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { EntityManager, Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Admin } from '../users/entities/admin.entity';
@@ -16,6 +17,7 @@ export class AuthService {
     private readonly entityManager: EntityManager,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async registerAdmin({
@@ -44,6 +46,8 @@ export class AuthService {
       });
 
       await entityManager.save(newAdmin);
+
+      delete newUser.password;
 
       return newUser;
     });
@@ -78,12 +82,18 @@ export class AuthService {
 
       await entityManager.save(newPatient);
 
+      delete newUser.password;
+
       return newUser;
     });
   }
 
   async signIn({ email, password }: SignInDto) {
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: { patient: true, admin: true },
+    });
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -92,7 +102,15 @@ export class AuthService {
 
     delete user.password;
 
-    return user;
+    const payload = { sub: user.id, username: user.email };
+
+    return {
+      ...user,
+      accessToken: await this.jwtService.signAsync(payload, {
+        secret: 'Enter-your-secret-key-here',
+        expiresIn: '1h',
+      }),
+    };
   }
 
   private async hashPassword(password: string) {
