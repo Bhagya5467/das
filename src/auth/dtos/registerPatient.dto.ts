@@ -2,13 +2,14 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
 import { GENDER } from '../../common/enum';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RegisterAdminDto {
+export class RegisterPatientDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -38,4 +39,9 @@ export class RegisterAdminDto {
   @IsString()
   @IsOptional()
   readonly phoneNo?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  readonly age: number;
 }

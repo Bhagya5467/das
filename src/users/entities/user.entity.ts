@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { GENDER } from '../../common/enum';
 import { Admin } from './admin.entity';
+import { Patient } from './patient.entity';
 
 @Entity()
 export class User {
@@ -29,8 +30,14 @@ export class User {
   @Column({ type: 'varchar', nullable: true, default: null })
   address: string;
 
+  @Column({ type: 'varchar', nullable: true, length: 10 })
+  phoneNo: string;
+
   @OneToOne(() => Admin, (admin) => admin.user)
   admin: Admin;
+
+  @OneToOne(() => Patient, (patient) => patient.user)
+  patient: Patient;
 
   @CreateDateColumn()
   createdAt: Date;
