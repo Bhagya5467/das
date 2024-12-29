@@ -103,13 +103,14 @@ export class AuthService {
     delete user.password;
 
     const payload = { sub: user.id, username: user.email };
+    const jwt = await this.jwtService.signAsync(payload, {
+      secret: 'Enter-your-secret-key-here',
+      expiresIn: '1h',
+    });
 
     return {
       ...user,
-      accessToken: await this.jwtService.signAsync(payload, {
-        secret: 'Enter-your-secret-key-here',
-        expiresIn: '1h',
-      }),
+      accessToken: jwt,
     };
   }
 
