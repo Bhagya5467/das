@@ -1,5 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { GENDER } from '../../common/enum';
+import { Admin } from './admin.entity';
 
 @Entity()
 export class User {
@@ -20,4 +28,13 @@ export class User {
 
   @Column({ type: 'varchar', nullable: true, default: null })
   address: string;
+
+  @OneToOne(() => Admin, (admin) => admin.user)
+  admin: Admin;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
