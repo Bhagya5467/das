@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RegisterAdminDto } from './dtos/registerAdmin.dto';
 import { User } from '../users/entities/user.entity';
+import { SignInDto } from './dtos/signIn.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +30,19 @@ export class AuthService {
     });
 
     return this.userRepository.save(newAdmin);
+  }
+
+  async signIn({ email, password }: SignInDto) {
+    const user = await this.userRepository.findOneBy({ email });
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      throw new UnauthorizedException();
+    }
+
+    delete user.password;
+
+    return user;
   }
 
   private async hashPassword(password: string) {
