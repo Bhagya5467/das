@@ -12,7 +12,7 @@ export class User {
   @Column({ type: 'varchar', length: 100 })
   email: string;
 
-  @Column({ type: 'enum' })
+  @Column({ type: 'enum', enum: GENDER })
   gender: GENDER;
 
   @Column({ type: 'varchar' })
