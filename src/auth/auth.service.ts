@@ -9,6 +9,8 @@ import { RegisterAdminDto } from './dtos/registerAdmin.dto';
 import { SignInDto } from './dtos/signIn.dto';
 import { RegisterPatientDto } from './dtos/registerPatient.dto';
 import { Patient } from 'src/users/entities/patient.entity';
+import { RegisterDoctorDto } from './dtos/registerDoctor.dto';
+import { Doctor } from 'src/users/entities/doctor.entity';
 
 @Injectable()
 export class AuthService {
@@ -77,6 +79,41 @@ export class AuthService {
 
       const newPatient = entityManager.create(Patient, {
         age,
+        user: newUser,
+      });
+
+      await entityManager.save(newPatient);
+
+      delete newUser.password;
+
+      return newUser;
+    });
+  }
+
+  async registerDoctor({
+    email,
+    gender,
+    name,
+    password,
+    address,
+    phoneNo,
+    slmcRegNo,
+  }: RegisterDoctorDto) {
+    return await this.entityManager.transaction(async (entityManager) => {
+      const hashedPassword = await this.hashPassword(password);
+      const newUser = entityManager.create(User, {
+        email,
+        gender,
+        name,
+        address,
+        phoneNo,
+        slmcRegNo,
+        password: hashedPassword,
+      });
+
+      await entityManager.save(newUser);
+
+      const newPatient = entityManager.create(Doctor, {
         user: newUser,
       });
 
