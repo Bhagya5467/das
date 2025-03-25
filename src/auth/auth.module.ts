@@ -13,3 +13,4 @@ import { Patient } from '../users/entities/patient.entity';
   providers: [AuthService, JwtService],
 })
 export class AuthModule {}
+

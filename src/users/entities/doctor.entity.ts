@@ -12,10 +12,31 @@ export class Doctor {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int' })
-  age: number;
+  @Column()
+  name: string;
+
+  @Column()
+  specialty: string;
+
+  @Column()
+  qualifications: string;
+
+  @Column()
+  slmcRegistrationNumber: string;
+
+  @Column()
+  availableDays: string;
+
+  @Column()
+  availableTime: string;
+
+  @Column()
+  location: string;
 
   @OneToOne(() => User, (user) => user.doctor)
   @JoinColumn()
   user: User;
 }
+
+
+  
