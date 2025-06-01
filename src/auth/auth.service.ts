@@ -3,14 +3,14 @@ import * as bcrypt from 'bcrypt';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { EntityManager, Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { Admin } from '../users/entities/admin.entity';
+import { User } from 'src/users/user.entity';
+import { Admin } from 'src/admin/admin.entity';
 import { RegisterAdminDto } from './dtos/registerAdmin.dto';
 import { SignInDto } from './dtos/signIn.dto';
 import { RegisterPatientDto } from './dtos/registerPatient.dto';
-import { Patient } from 'src/users/entities/patient.entity';
+import { Patient } from 'src/patients/patient.entity';
 import { RegisterDoctorDto } from './dtos/registerDoctor.dto';
-import { Doctor } from 'src/users/entities/doctor.entity';
+import { Doctor } from 'src/doctors/doctor.entity';
 
 @Injectable()
 export class AuthService {
@@ -107,7 +107,6 @@ export class AuthService {
         name,
         address,
         phoneNo,
-        slmcRegNo,
         password: hashedPassword,
       });
 
@@ -115,6 +114,7 @@ export class AuthService {
 
       const newPatient = entityManager.create(Doctor, {
         user: newUser,
+        slmcRegNo,
       });
 
       await entityManager.save(newPatient);

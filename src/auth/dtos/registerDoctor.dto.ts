@@ -43,5 +43,5 @@ export class RegisterDoctorDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  readonly slmcRegNo: number;
+  readonly slmcRegNo: string;
 }

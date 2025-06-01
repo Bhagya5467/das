@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { User } from '../users/entities/user.entity';
-import { Admin } from '../users/entities/admin.entity';
-import { Patient } from '../users/entities/patient.entity';
+import { User } from 'src/users/user.entity';
+import { Admin } from 'src/admin/admin.entity';
+import { Patient } from 'src/patients/patient.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Admin, Patient])],

@@ -1,0 +1,5 @@
+export enum APPOINMENT_STATUS {
+  PENDING = 'PENDING',
+  BOOKED = 'BOOKED',
+  CANCEL = 'CANCEL',
+}

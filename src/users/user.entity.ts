@@ -5,15 +5,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  Unique
+  Unique,
 } from 'typeorm';
-import { GENDER } from '../../common/enum';
-import { Admin } from './admin.entity';
-import { Patient } from './patient.entity';
-import { Doctor } from './doctor.entity';
+import { GENDER, ROLE } from 'src/common/enum';
+import { Admin } from 'src/admin/admin.entity';
+import { Patient } from 'src/patients/patient.entity';
+import { Doctor } from 'src/doctors/doctor.entity';
 
 @Entity()
-@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,8 +35,8 @@ export class User {
   @Column({ type: 'varchar', nullable: true, length: 10 })
   phoneNo: string;
 
-  @Column({ type: 'enum', enum: ['doctor', 'patient', 'admin'] })
-  role: 'doctor' | 'patient' | 'admin';
+  @Column({ type: 'enum', enum: ROLE })
+  role: ROLE;
 
   @OneToOne(() => Admin, (admin) => admin.user)
   admin: Admin;
@@ -46,7 +45,7 @@ export class User {
   patient: Patient;
 
   @OneToOne(() => Doctor, (doctor) => doctor.user)
-  doctor?: Doctor;
+  doctor: Doctor;
 
   @CreateDateColumn()
   createdAt: Date;
